@@ -9,6 +9,8 @@ library(dada2)
 library(dplyr)
 library(ggplot2)
 
+### NeonMicrobe Vignette for reference: https://people.ucsc.edu/~claraqin/analyze-neon-greatplains-16s.R
+
 ### DATA from Laura filter out to get all the relevant sites
 datasets <- read.csv("data/MRR_2024_dataset_descript.csv")
 datasets <- datasets %>%
@@ -21,7 +23,7 @@ sites_to_DL <- datasets$Site
 sites_to_DL <- "HARV" ## Test one site for now
 
 meta_16s <- downloadSequenceMetadata(sites = sites_to_DL, 
-                                     startYrMo = "2013-01", endYrMo = "2021-12", 
+                                     startYrMo = "2016-01", endYrMo = "2021-12", 
                                      targetGene = "16S", outDir = "data/sequenceMeta",
                                      include.provisional = TRUE)
 
@@ -66,9 +68,9 @@ write.csv(meta_16s_qc_toDL, quote = FALSE, row.names = FALSE,  "data/raw_sequenc
 
 ## Now use the Harvard sites only - metadata input file might need to be adjusted for other sites
 meta_16_qc_HARV <- read.csv(file = "data/sequenceMeta/mmg_metadata_16SrRNA_QCd_20240614.csv")
-meta_16_qc <- read.csv(file = "data/sequenceMeta/mmg_metadata_16SrRNA_QCd_20240603.csv")
+# meta_16_qc <- read.csv(file = "data/sequenceMeta/mmg_metadata_16SrRNA_QCd_20240603.csv")
 meta_16_qc_HARV$date_ymd <- as.Date(format(as.Date(meta_16_qc_HARV$collectDate, format="%Y-%m-%d %H:%M:%S"), "%Y-%m-%d"))
-meta_16_qc$date_ymd <- as.Date(format(as.Date(meta_16_qc$collectDate, format="%Y-%m-%d %H:%M:%S"), "%Y-%m-%d"))
+# meta_16_qc$date_ymd <- as.Date(format(as.Date(meta_16_qc$collectDate, format="%Y-%m-%d %H:%M:%S"), "%Y-%m-%d"))
 
 
 meta_16_qc_HARV_pre_2019 <- meta_16_qc_HARV %>%
@@ -76,6 +78,9 @@ meta_16_qc_HARV_pre_2019 <- meta_16_qc_HARV %>%
 meta_16_qc_HARV_post_2019 <- meta_16_qc_HARV %>%
   filter(meta_16_qc_HARV$date_ymd >= ymd("2020-01-01"))
 
+
+meta_16s_qc_toRemove <- meta_16_qc_HARV %>%
+  filter(date_ymd < ymd("2016-01-01"))
 
 
 # unique_runs <- unique(meta_16_qc$sequencerRunID)
