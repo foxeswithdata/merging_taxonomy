@@ -74,14 +74,10 @@ meta_16_qc_HARV$date_ymd <- as.Date(format(as.Date(meta_16_qc_HARV$collectDate, 
 
 
 meta_16_qc_HARV_pre_2019 <- meta_16_qc_HARV %>%
-  filter(meta_16_qc_HARV$date_ymd < ymd("2020-01-01"))
+  filter(meta_16_qc_HARV$date_ymd < ymd("2020-01-01")) %>%
+  filter(date_ymd >= ymd("2016-01-01"))
 meta_16_qc_HARV_post_2019 <- meta_16_qc_HARV %>%
   filter(meta_16_qc_HARV$date_ymd >= ymd("2020-01-01"))
-
-
-meta_16s_qc_toRemove <- meta_16_qc_HARV %>%
-  filter(date_ymd < ymd("2016-01-01"))
-
 
 # unique_runs <- unique(meta_16_qc$sequencerRunID)
 
