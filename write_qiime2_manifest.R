@@ -3,13 +3,13 @@ write_qiime2_manifest_file <- function(meta, forwrdPrimer, reversePrimer, runDir
   meta <- select(meta, c("dnaSampleID","rawDataFileName", "rawDataFilePath",  
                          "domainID", "siteID", "plotID", "internalLabID.seq",
                          "instrument_model", "illuminaAdapterKit", "illuminaIndex1", "illuminaIndex2",
-                         "targetGene", "sampleMaterial", "nucleicAcidQuantMethod"))
-  
+                         "targetGene", "sampleMaterial", "nucleicAcidQuantMethod", "yr", "mnth"))
+  meta <- unique(meta)
   meta$direction <- ifelse(grepl("_R1", meta$rawDataFileName), "forward", "reverse")
   
   meta <- meta %>% pivot_wider(id_cols = c("dnaSampleID", "domainID", "siteID", "plotID", "internalLabID.seq",
                                "instrument_model", "illuminaAdapterKit", "illuminaIndex1", "illuminaIndex2",
-                               "targetGene", "sampleMaterial", "nucleicAcidQuantMethod"),
+                               "targetGene", "sampleMaterial", "nucleicAcidQuantMethod", "yr", "mnth"),
                                values_from = c("rawDataFileName", "rawDataFilePath"),
                                names_from = "direction")
   
@@ -20,8 +20,8 @@ write_qiime2_manifest_file <- function(meta, forwrdPrimer, reversePrimer, runDir
   
   
   qiime2_manifest <- data.frame("sample-id" = meta$dnaSampleID,
-                               "forward-absolute-filepath" = paste(Subdirectory, meta$rawDataFileName_forward, sep = "/"),
-                               "reverse-absolute-filepath" = paste(Subdirectory, meta$rawDataFileName_reverse, sep = "/"),
+                               "forward-absolute-filepath" = paste(Subdirectory, meta$siteID, meta$yr, meta$mnth, "16S", meta$rawDataFileName_forward, sep = "/"),
+                               "reverse-absolute-filepath" = paste(Subdirectory, meta$siteID, meta$yr, meta$mnth, "16S", meta$rawDataFileName_reverse, sep = "/"),
                                "wget_forward-absolute-filepath" = meta$rawDataFilePath_forward,
                                "wget_reverse-absolute-filepath" = meta$rawDataFilePath_reverse,
                                Subdirectory = Subdirectory,

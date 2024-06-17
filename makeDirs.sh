@@ -1,11 +1,11 @@
 #!/bin/bash
 
-input="toDL.csv"
+input="dirs_to_create.csv"
 
 while IFS= read -r line 
 do
 	echo $line
-	wget --no-check-certificate $line 
+	mkdir -p  $line 
  done < $input 
 
 
