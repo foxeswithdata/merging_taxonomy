@@ -127,7 +127,7 @@ test_sum <- meta_16_qc |>
   dplyr::arrange(processed_yr)
 
 test_sum$testProtocolVersion.seq <- as.factor(test_sum$testProtocolVersion.seq) 
-test_sum$testProtocolVersion.seq <- factor(mydf$task, levels = c("BMI_markerGeneSequencingSOP_v1", 
+test_sum$testProtocolVersion.seq <- factor(test_sum$testProtocolVersion.seq, levels = c("BMI_markerGeneSequencingSOP_v1", 
                                                                  "BMI_markerGeneSequencingSOP_v2", 
                                                                  "BMI_markerGenes_16Sv4v5SOP_v1.1", 
                                                                  "BMI_markerGenes_16Sv4v5SOP_v1.2", 
@@ -337,6 +337,8 @@ for (run_ID in unique_runs[1:length(unique_runs)]){
     write.csv(qiime2_primer1_sub_errors, paste0("outputs/primer1/qiime_simple/", run_ID, "_error_reads_qiime2_manifest_primer1_short.csv"), row.names = FALSE)
   }
 }
+
+
 
 unique_runs <- unique(meta_16_qc_primer2$sampleCodeID)
 for (run_ID in unique_runs){
